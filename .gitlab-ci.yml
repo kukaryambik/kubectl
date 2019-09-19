@@ -1,0 +1,7 @@
+include:
+  - project: "iac/ci"
+    ref: "3.0"
+    file: "/main.yml"
+
+build:image:
+  extends: .build_image
