@@ -4,12 +4,13 @@ ARG KUBECTL_VER
 ARG KUBEVAL_VER
 ENV KUBECTL_VER=1.15.3 \
     KUBEVAL_VER=0.14.0 \
+    USER=kubectl \
     HOME=/kubectl
 
 RUN set -x \
     && apk add --no-cache curl ca-certificates \
     # Create non-root user (with a randomly chosen UID/GUI).
-    && adduser kubectl -Du $((RANDOM%8998+1001)) -h $HOME
+    && adduser $USER -Du $((RANDOM%8998+1001)) -h $HOME
 
 RUN set -x \
     # Install Kubectl
@@ -25,7 +26,8 @@ RUN set -x \
     && cp kubeval /usr/local/bin/ \
     && rm -rf "$TMP_PATH"
 
-USER kubectl
+USER $USER
 WORKDIR $HOME
 
 ENTRYPOINT ["/usr/local/bin/kubectl"]
+CMD ["version"]
